@@ -69,22 +69,22 @@ async def register_user(user: schemas.UserCreate, session: Session = Depends(get
 
 
 
-@app.post('/api/auth/login' ,response_model=schemas.TokenSchema, tags=["Authentication"])
+@app.post('/api/auth/login', response_model=schemas.TokenSchema, tags=["Authentication"])
 async def login(request: schemas.requestdetails, db: Session = Depends(get_session)):
-    user = db.query(User).filter(User.email == request.email).first()
+    user = db.query(models.User).filter(models.User.email == request.email).first()
     if user is None:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Incorrect email")
-    hashed_pass = user.password
-    if not verify_password(request.password, hashed_pass):
+    
+    if not verify_password(request.password, user.password):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Incorrect password"
         )
     
-    access=create_access_token(user.id)
+    access = create_access_token(user.id)
     refresh = create_refresh_token(user.id)
 
-    token_db = models.TokenTable(user_id=user.id,  access_toke=access,  refresh_toke=refresh, status=True)
+    token_db = models.TokenTable(user_id=user.id, access_toke=access, refresh_toke=refresh, status=True)
     db.add(token_db)
     db.commit()
     db.refresh(token_db)

@@ -1,11 +1,7 @@
+
+#from jwt import InvalidTokenError
+#from jwt.exceptions import InvalidTokenError
 import jwt
-
-try:
-    from jwt import InvalidTokenError
-except ImportError:
-    from jwt.exceptions import InvalidTokenError
-
-
 from fastapi import FastAPI, Depends, HTTPException,status
 from fastapi import Request, HTTPException
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
@@ -18,12 +14,10 @@ JWT_SECRET_KEY = "narscbjim@$@&^@&%^&RFghgjvbdsha"   # should be kept secret
 JWT_REFRESH_SECRET_KEY = "13ugfdfgh@#$%^@&jkl45678902"
 
 def decodeJWT(jwtoken: str):
-    try:
-        # Decode and verify the token
-        payload = jwt.decode(jwtoken, JWT_SECRET_KEY, ALGORITHM)
-        return payload
-    except InvalidTokenError:
-        return None
+    # Decode and verify the token
+    payload = jwt.decode(jwtoken, JWT_SECRET_KEY, ALGORITHM)
+    return payload
+
 
 
 class JWTBearer(HTTPBearer):

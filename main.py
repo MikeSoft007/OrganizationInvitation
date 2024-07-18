@@ -1,3 +1,4 @@
+import logging
 import schemas, jwt
 import uvicorn
 from datetime import datetime, timedelta
@@ -12,6 +13,10 @@ from utils import JWT_SECRET_KEY, ALGORITHM
 from functools import wraps
 from collections import OrderedDict
 from urllib.parse import urlencode
+
+
+# Set passlib logger level to ERROR
+logging.getLogger('passlib').setLevel(logging.ERROR)
 
 
 Base.metadata.create_all(engine)

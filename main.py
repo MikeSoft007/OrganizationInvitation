@@ -229,7 +229,8 @@ async def generate_invite_link(invite: schemas.InvitationCreate, session: Sessio
     session.commit()
     session.refresh(new_invite)
 
-    invite_link = f"http://127.0.0.1:8000/api/invite/accept?{urlencode({'invitation_id': new_invite.id})}"
+    invite_link = f"https://organization-invitation.vercel.app/api/invite/accept?{urlencode({'invitation_id': new_invite.id})}"
+    
     return {"invitation_link": invite_link}
 
 

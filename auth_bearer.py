@@ -1,5 +1,5 @@
 import jwt
-from jwt import InvalidTokenError  # Updated import statement
+from jwt.exceptions import PyJWTError  # Use PyJWTError to catch JWT-related exceptions
 from fastapi import FastAPI, Depends, HTTPException, status
 from fastapi import Request
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
@@ -16,7 +16,7 @@ def decodeJWT(jwtoken: str):
         # Decode and verify the token
         payload = jwt.decode(jwtoken, JWT_SECRET_KEY, algorithms=[ALGORITHM])
         return payload
-    except InvalidTokenError:
+    except PyJWTError:  # Use PyJWTError to catch all JWT-related errors
         return None
 
 class JWTBearer(HTTPBearer):

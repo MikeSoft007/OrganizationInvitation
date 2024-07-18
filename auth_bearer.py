@@ -1,5 +1,4 @@
 import jwt
-from jwt.exceptions import PyJWTError  # Use PyJWTError to catch JWT-related exceptions
 from fastapi import FastAPI, Depends, HTTPException, status
 from fastapi import Request
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
@@ -16,8 +15,10 @@ def decodeJWT(jwtoken: str):
         # Decode and verify the token
         payload = jwt.decode(jwtoken, JWT_SECRET_KEY, algorithms=[ALGORITHM])
         return payload
-    except PyJWTError:  # Use PyJWTError to catch all JWT-related errors
-        return None
+    except jwt.ExpiredSignatureError:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Token has expired")
+    except jwt.InvalidTokenError:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token")
 
 class JWTBearer(HTTPBearer):
     def __init__(self, auto_error: bool = True):
@@ -38,7 +39,7 @@ class JWTBearer(HTTPBearer):
         isTokenValid: bool = False
         try:
             payload = decodeJWT(jwtoken)
-        except:
+        except HTTPException:
             payload = None
         if payload:
             isTokenValid = True

@@ -1,9 +1,12 @@
 {
     "version": 2,
+    "env": {
+      "POSTGRES_URL": "@your_postgres_url" 
+    },
     "builds": [
-        {"src": "main.py", "use": "@vercel/python"}
-    ],
-    "routes": [
-        {"src": "/(.*)", "dest": "main.py"}
+      {
+        "src": "main.py",
+        "use": "@vercel/python"
+      }
     ]
-}
+  }

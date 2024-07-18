@@ -22,7 +22,11 @@ def get_session():
         session.close()
 
 
-app = FastAPI()
+app = FastAPI(
+    title="Accept invitation to join organization",
+    description="An API endpoint to handle accepting invitation links to join an organization. This endpoint will validate the invitation link and automatically add the user to the specified organization upon successful validation",
+    version="1.0.0",
+)
 
 
 @app.get("/")
@@ -258,3 +262,6 @@ async def accept_invite(invite_data: schemas.InvitationAccept, session: Session 
     session.commit()
 
     return {"message": "Invitation accepted, you have been added to the organization", "status": 200}
+
+
+

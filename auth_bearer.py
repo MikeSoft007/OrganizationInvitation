@@ -1,5 +1,11 @@
 import jwt
-from jwt import InvalidTokenError
+
+try:
+    from jwt import InvalidTokenError
+except ImportError:
+    from jwt.exceptions import InvalidTokenError
+
+
 from fastapi import FastAPI, Depends, HTTPException,status
 from fastapi import Request, HTTPException
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials

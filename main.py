@@ -1,4 +1,5 @@
 import schemas, jwt
+import uvicorn
 from datetime import datetime, timedelta
 import models
 from auth_bearer import JWTBearer
@@ -265,3 +266,5 @@ async def accept_invite(invite_data: schemas.InvitationAccept, session: Session 
 
 
 
+if __name__ == "__main__":
+    uvicorn.run("main:app", port=7001, reload=True)

@@ -1,4 +1,4 @@
-import jwt
+import pyjwt as jwt
 from fastapi import FastAPI, Depends, HTTPException, status
 from fastapi import Request
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials

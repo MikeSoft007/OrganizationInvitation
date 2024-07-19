@@ -103,11 +103,16 @@ async def login(request: schemas.requestdetails, db: Session = Depends(get_sessi
 @app.get('/api/getusers', tags=["User Management"])
 async def getusers( dependencies=Depends(JWTBearer()),session: Session = Depends(get_session)):
     user = session.query(models.User).all()
-    return {
-        "message" : "user data retrived successfully",
-        "data": user
-        }
-
+    return { 
+        "message" : "user data retrived successfully", 
+        "data":[
+            { 
+                "email": user["email"], 
+                "id": user["id"], 
+                "username": user["username"] 
+            } for user in data 
+        ]
+    }
 
 
 @app.post('/api/auth/password-change', tags=["Authentication"])

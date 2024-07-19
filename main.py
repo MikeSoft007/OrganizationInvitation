@@ -1,6 +1,6 @@
 import logging
 import schemas
-import pyjwt
+import jwt  # Import pyjwt as jwt
 import uvicorn
 from datetime import datetime, timedelta
 import models

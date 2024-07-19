@@ -38,10 +38,10 @@ class UserOrganization(Base):
     
 
 class Invitation(Base):
-    __tablename__ = 'invitations'
-    id = Column(String(100), primary_key=True, default=lambda: str(uuid.uuid4()))
-    user_id = Column(String(100), ForeignKey('users.id'), nullable=False)
-    organization_id = Column(String(100), ForeignKey('organizations.id'), nullable=False)
-    created_at = Column(DateTime, default=datetime.datetime.now)
-    expires_at = Column(DateTime, nullable=False)
-    is_valid = Column(Boolean, default=True)
+    __tablename__      = 'invitations'
+    id                 = Column(String(100), primary_key=True, default=lambda: str(uuid.uuid4()))
+    user_id            = Column(String(100), ForeignKey('users.id'), nullable=False)
+    organization_id    = Column(String(100), ForeignKey('organizations.id'), nullable=False)
+    created_at         = Column(DateTime, default=datetime.datetime.now)
+    expires_at         = Column(DateTime, nullable=False)
+    is_valid           = Column(Boolean, default=True)

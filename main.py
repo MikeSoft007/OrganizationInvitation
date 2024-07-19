@@ -1,5 +1,6 @@
 import logging
-import schemas, jwt
+import schemas
+import pyjwt
 import uvicorn
 from datetime import datetime, timedelta
 import models
@@ -7,7 +8,7 @@ from auth_bearer import JWTBearer
 from models import User, TokenTable, Invitation
 from utils import get_hashed_password, verify_password, create_access_token, create_refresh_token
 from database import Base, engine, SessionLocal
-from fastapi import FastAPI, Depends, HTTPException,status
+from fastapi import FastAPI, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from utils import JWT_SECRET_KEY, ALGORITHM
 from functools import wraps

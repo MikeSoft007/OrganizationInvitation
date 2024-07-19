@@ -57,7 +57,7 @@ def token_required(func):
     return wrapper
 
 
-@app.post("/api/auth/register", tags=["Authentication"])
+@app.post("/api/v1/auth/register", tags=["Authentication"])
 async def register_user(user: schemas.UserCreate, session: Session = Depends(get_session)):
     existing_user = session.query(models.User).filter_by(email=user.email).first()
     if existing_user:
@@ -75,7 +75,7 @@ async def register_user(user: schemas.UserCreate, session: Session = Depends(get
 
 
 
-@app.post('/api/auth/login', response_model=schemas.TokenSchema, tags=["Authentication"])
+@app.post('/api/v1/auth/login', response_model=schemas.TokenSchema, tags=["Authentication"])
 async def login(request: schemas.requestdetails, db: Session = Depends(get_session)):
     user = db.query(models.User).filter(models.User.email == request.email).first()
     if user is None:
@@ -100,7 +100,7 @@ async def login(request: schemas.requestdetails, db: Session = Depends(get_sessi
     }
 
 @token_required
-@app.get('/api/getusers', tags=["User Management"])
+@app.get('/api/v1/getusers', tags=["User Management"])
 async def getusers(dependencies=Depends(JWTBearer()), session: Session = Depends(get_session)):
     users = session.query(models.User).all()
     return { 
@@ -115,7 +115,7 @@ async def getusers(dependencies=Depends(JWTBearer()), session: Session = Depends
     }
 
 
-@app.post('/api/auth/password-change', tags=["Authentication"])
+@app.post('/api/v1/auth/password-change', tags=["Authentication"])
 def change_password(request: schemas.changepassword, db: Session = Depends(get_session)):
     print("hello")
     user = db.query(models.User).filter(models.User.email == request.email).first()
@@ -134,7 +134,7 @@ def change_password(request: schemas.changepassword, db: Session = Depends(get_s
 
 
 @token_required
-@app.post('/api/auth/logout', tags=["Authentication"])
+@app.post('/api/v1/auth/logout', tags=["Authentication"])
 async def logout(dependencies=Depends(JWTBearer()), db: Session = Depends(get_session)):
     token=dependencies
     payload = jwt.decode(token, JWT_SECRET_KEY, ALGORITHM)
@@ -159,7 +159,7 @@ async def logout(dependencies=Depends(JWTBearer()), db: Session = Depends(get_se
 
 
 # Create new organization
-@app.post("/api/organization", dependencies=[Depends(JWTBearer())], tags=["Organization Management"])
+@app.post("/api/v1/organization", dependencies=[Depends(JWTBearer())], tags=["Organization Management"])
 async def create_organizations(org: schemas.OrganizationCreate, session: Session = Depends(get_session)):
     existing_organization = session.query(models.Organization).filter_by(name=org.name).first()
     if existing_organization:
@@ -175,7 +175,7 @@ async def create_organizations(org: schemas.OrganizationCreate, session: Session
 
 
 #add user to organization
-@app.post("/organizations/{org_id}/users", dependencies=[Depends(JWTBearer())], tags=["Organization Management"])
+@app.post("/api/v1/organizations/{org_id}/users", dependencies=[Depends(JWTBearer())], tags=["Organization Management"])
 async def add_user_to_organization(org_id: str, user_data: schemas.UserAddToOrganization, session: Session = Depends(get_session)):
     print("I am here")
     if not user_data.user_id:
@@ -222,7 +222,7 @@ async def add_user_to_organization(org_id: str, user_data: schemas.UserAddToOrga
         )
 
 
-@app.post("/api/invite", dependencies=[Depends(JWTBearer())], tags=["Invitation Management"])
+@app.post("/api/v1/invite", dependencies=[Depends(JWTBearer())], tags=["Invitation Management"])
 async def generate_invite_link(invite: schemas.InvitationCreate, session: Session = Depends(get_session)):
     user = session.query(models.User).filter_by(id=invite.user_id).first()
     org = session.query(models.Organization).filter_by(id=invite.organization_id).first()
@@ -243,7 +243,7 @@ async def generate_invite_link(invite: schemas.InvitationCreate, session: Sessio
 
 
 
-@app.post("/api/invite/accept", tags=["Invitation Management"])
+@app.post("/api/v1/invite/accept", tags=["Invitation Management"])
 async def accept_invite(invite_data: schemas.InvitationAccept, session: Session = Depends(get_session)):
     invite_id = invite_data.invitation_link.split('invitation_id=')[1]
     print("Tthis is an invite link", invite_id)

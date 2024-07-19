@@ -101,16 +101,16 @@ async def login(request: schemas.requestdetails, db: Session = Depends(get_sessi
 
 @token_required
 @app.get('/api/getusers', tags=["User Management"])
-async def getusers( dependencies=Depends(JWTBearer()),session: Session = Depends(get_session)):
-    user = session.query(models.User).all()
+async def getusers(dependencies=Depends(JWTBearer()), session: Session = Depends(get_session)):
+    users = session.query(models.User).all()
     return { 
-        "message" : "user data retrived successfully", 
-        "data":[
+        "message": "User data retrieved successfully", 
+        "data": [
             { 
-                "email": user["email"], 
-                "id": user["id"], 
-                "username": user["username"] 
-            } for user in data 
+                "email": user.email, 
+                "id": user.id, 
+                "username": user.username 
+            } for user in users 
         ]
     }
 

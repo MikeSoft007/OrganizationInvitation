@@ -105,10 +105,7 @@ async def getusers( dependencies=Depends(JWTBearer()),session: Session = Depends
     user = session.query(models.User).all()
     return {
         "message" : "user data retrived successfully",
-        "data": {
-            "username": user.username,
-            "email": user.email
-        }
+        "data": user
         }
 
 

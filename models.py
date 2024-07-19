@@ -36,7 +36,8 @@ class UserOrganization(Base):
     user_id         = Column(String(100), ForeignKey('users.id'), primary_key=True)
     organization_id = Column(String(100), ForeignKey('organizations.id'), primary_key=True)
     
-
+#add a user such that when that when the invite is sent , you will get a message like "this user" has invited you. 
+# so update the model to include a user sending the invite
 class Invitation(Base):
     __tablename__      = 'invitations'
     id                 = Column(String(100), primary_key=True, default=lambda: str(uuid.uuid4()))
